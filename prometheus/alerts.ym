@@ -1,0 +1,51 @@
+groups:
+  - name: dns_alerts
+    rules:
+
+      # ── Server Down ─────────────────────────────────────────────────────────
+      - alert: DNSServerDown
+        expr: dns_server_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DNS server {{ $labels.dns_name }} is DOWN"
+          description: >
+            DNS server {{ $labels.dns_name }} ({{ $labels.dns_ip }})
+            has been unreachable for more than 1 minute.
+
+      # ── Response Mismatch ────────────────────────────────────────────────────
+      - alert: DNSResponseMismatch
+        expr: dns_response_mismatch == 1
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DNS mismatch detected for domain {{ $labels.domain }}"
+          description: >
+            DNS servers are returning different IP addresses for {{ $labels.domain }}.
+            This may indicate DNS hijacking, caching inconsistency, or a misconfiguration.
+
+      # ── High Response Time ───────────────────────────────────────────────────
+      - alert: DNSHighResponseTime
+        expr: dns_response_time_seconds > 2
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DNS {{ $labels.dns_name }} slow for {{ $labels.domain }}"
+          description: >
+            DNS server {{ $labels.dns_name }} is taking {{ $value | humanizeDuration }}
+            to resolve {{ $labels.domain }}.
+
+      # ── Query Failure ────────────────────────────────────────────────────────
+      - alert: DNSQueryFailing
+        expr: dns_query_success == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "DNS query failing: {{ $labels.dns_name }} → {{ $labels.domain }}"
+          description: >
+            {{ $labels.dns_name }} ({{ $labels.dns_ip }}) has been failing to resolve
+            {{ $labels.domain }} for more than 2 minutes.
