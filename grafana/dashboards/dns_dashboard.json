@@ -23,7 +23,7 @@
       "title": "Shecan (5.200.200.200)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 8, "x": 0, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_server_up{dns_name=\"shecan\"}",
@@ -59,7 +59,7 @@
       "title": "403 DNS-1 (217.218.127.127)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 8, "x": 8, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_server_up{dns_name=\"403_1\"}",
@@ -93,7 +93,7 @@
       "title": "403 DNS-2 (217.218.155.155)",
       "type": "stat",
       "gridPos": { "h": 4, "w": 8, "x": 16, "y": 1 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_server_up{dns_name=\"403_2\"}",
@@ -135,7 +135,7 @@
       "title": "DNS Response Times",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_response_time_seconds",
@@ -174,7 +174,7 @@
       "title": "Resolved IPs — All DNS × All Domains",
       "type": "table",
       "gridPos": { "h": 14, "w": 24, "x": 0, "y": 15 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_resolved_ip_info == 1",
@@ -257,7 +257,7 @@
       "title": "DNS Mismatch Status per Domain",
       "type": "table",
       "gridPos": { "h": 10, "w": 24, "x": 0, "y": 30 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "dns_response_mismatch",
@@ -313,7 +313,7 @@
       "title": "Query Success Rate per DNS",
       "type": "bargauge",
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 40 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
       "targets": [
         {
           "expr": "avg by (dns_name) (dns_query_success) * 100",
@@ -341,14 +341,46 @@
           }
         }
       }
-    }
+    },
+    
 
+    {
+      "id": 12,
+      "title": "TEST: Raw dns_server_up",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 24, "x": 0, "y": 50 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "targets": [
+          {
+              "expr": "dns_server_up",
+              "refId": "A",
+              "legendFormat": "{{ dns_name }}",
+              "instant": true
+          }
+      ],
+      "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"] },
+          "colorMode": "background",
+          "graphMode": "none"
+      },
+      "fieldConfig": {
+          "defaults": {
+              "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                      { "color": "red",   "value": null },
+                      { "color": "green", "value": 1    }
+                  ]
+              }
+          }
+      }
+    }
   ],
   "refresh": "30s",
   "schemaVersion": 39,
   "tags": ["dns", "monitoring"],
   "templating": { "list": [] },
-  "time": { "from": "now-1h", "to": "now" },
+  "time": { "from": "now-5m", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
   "title": "DNS Monitoring",
